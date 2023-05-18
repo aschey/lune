@@ -1,0 +1,34 @@
+{
+  "name": "lune",
+  "version": "0.0.0",
+  "description": "",
+  "scripts": {
+    "start": "vite",
+    "dev": "vite",
+    "build": "vite build",
+    "serve": "vite preview",
+    "tauri": "tauri"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@fortawesome/free-solid-svg-icons": "^6.4.0",
+    "@kobalte/core": "^0.9.6",
+    "@kobalte/tailwindcss": "^0.6.5",
+    "@tauri-apps/api": "2.0.0-alpha.3",
+    "daisyui": "^2.51.6",
+    "solid-fa": "^0.2.0",
+    "solid-js": "1.7.5"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "2.0.0-alpha.8",
+    "@types/node": "20.1.4",
+    "autoprefixer": "^10.4.14",
+    "mirrorful": "^6.1.15",
+    "postcss": "^8.4.23",
+    "solid-devtools": "^0.26.0",
+    "tailwindcss": "^3.3.2",
+    "typescript": "5.0.4",
+    "vite": "4.3.6",
+    "vite-plugin-solid": "2.7.0"
+  }
+}

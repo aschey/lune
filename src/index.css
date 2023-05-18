@@ -1,0 +1,16 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .link-highlight {
+    @apply link link-hover hover:text-accent hover:bg-base-content hover:bg-opacity-10 rounded;
+  }
+}
+
+.collapsible__trigger-icon {
+  transition: transform 250ms;
+}
+.collapsible__trigger[data-expanded] .collapsible__trigger-icon {
+  transform: rotateZ(90deg);
+}
