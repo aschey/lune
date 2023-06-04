@@ -1,0 +1,121 @@
+syntax = "proto3";
+
+package foobar;
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/wrappers.proto";
+import "google/protobuf/struct.proto";
+
+service Foobar {
+  rpc AFoo(AFooRequest) returns (AFooResponse) {}
+  rpc Baz(BazRequest) returns (BazResponse) {}
+  rpc Bar(BarRequest) returns (BarResponse) {}
+  rpc Foo(FooRequest) returns (FooResponse) {}
+  rpc Empty(EmptyRequest) returns (EmptyResponse) {}
+  rpc WellKnown(WellKnownRequest) returns (WellKnownResponse) {}
+  rpc SingleOneof(SingleOneofRequest) returns (SingleOneofResponse) {}
+}
+
+message Bar {
+  string id = 1;
+
+  message Nested {
+    string name = 1;
+    bool is_nested = 2;
+  }
+
+  repeated Nested names = 3;
+}
+
+enum Baz {
+  UNKNOWN = 0;
+  FOO = 1;
+  BAR = 2;
+  BAZ = 3;
+}
+
+message FooRequest {
+  double type_double = 1;
+  float type_float = 2;
+  int64 type_int64 = 3;
+  uint64 type_uint64 = 4;
+  int32 type_int32 = 5;
+  fixed64 type_fixed64 = 6;
+  fixed32 type_fixed32 = 7;
+  bool type_bool = 8;
+  string type_string = 9;
+  Bar type_message = 10;
+  bytes type_bytes = 11;
+  uint32 type_uint32 = 12;
+  Baz type_enum = 13;
+  sfixed32 type_sfixed32 = 14;
+  sfixed64 type_sfixed64 = 15;
+  sint32 type_sint32 = 16;
+  sint64 type_sint64 = 17;
+  map<string, string> type_string_map = 18;
+  map<string, Bar> type_complex_map = 19;
+}
+
+message FooResponse {}
+
+message BarRequest {
+  repeated string type_repeated_string = 1;
+  repeated float type_repeated_float = 2;
+  repeated bool type_repeated_bool = 3;
+  repeated Baz type_repeated_enum = 4;
+  repeated bytes type_repeated_bytes = 5;
+  repeated Bar type_repeated_message = 6;
+  repeated uint32 uint32repeated = 7;
+}
+
+message BarResponse {}
+
+message BazRequest {
+  oneof request {
+    FooRequest foo = 1;
+    BarRequest bar = 2;
+    string baz = 3;
+  }
+}
+
+message BazResponse {}
+
+message AFooRequest {
+  map<string, string> map_string_string = 1;
+  map<int32, bytes> map_int32_bytes = 2;
+  map<string, Baz> map_string_enum = 3;
+  map<string, bool> map_string_bool = 4;
+  map<int32, BazRequest> map_int32_message = 5;
+}
+
+message AFooResponse {}
+
+message EmptyRequest {}
+
+message EmptyResponse {}
+
+message WellKnownRequest {
+  google.protobuf.Timestamp timestamp = 1;
+  google.protobuf.Duration duration = 2;
+
+  google.protobuf.DoubleValue double_value = 3;
+  google.protobuf.FloatValue float_value = 4;
+  google.protobuf.Int64Value int64_value = 5;
+  google.protobuf.UInt64Value uint64_value = 6;
+  google.protobuf.Int32Value int32_value = 7;
+  google.protobuf.UInt32Value uint32_value = 8;
+
+  google.protobuf.BoolValue bool_value = 9;
+  google.protobuf.StringValue string_value = 10;
+  google.protobuf.BytesValue bytes_value = 11;
+  google.protobuf.Struct struct_value = 12;
+}
+
+message WellKnownResponse {}
+
+message SingleOneofRequest {
+  oneof foobar { WellKnownResponse baz = 1; }
+}
+
+message SingleOneofResponse {}
