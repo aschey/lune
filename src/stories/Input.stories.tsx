@@ -13,11 +13,15 @@ type Story = StoryObj<typeof meta>;
 export const Text: Story = {
   args: {
     type: "text",
+    name: "text",
+    label: "text",
   },
 };
 
 export const Number: Story = {
   args: {
     type: "number",
+    name: "number",
+    label: "text",
   },
 };
