@@ -39,7 +39,7 @@ export const Input: Component<InputProps> = (props) => {
         style={{ "padding-top": "1rem" }}
       />
       <label
-        class={`absolute top-3 left-0 pl-4 text-base-content scale-90 -translate-y-3 ${
+        class={`absolute top-3 left-0 pl-4 text-base-content scale-90 -translate-y-3 transition-transform ${
           !btnMouseDown() &&
           "peer-focus:scale-90 peer-focus:-translate-y-3 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0"
         }`}
