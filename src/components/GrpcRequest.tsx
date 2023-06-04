@@ -92,7 +92,6 @@ export const GrpcRequest: Component<{ message: ProtoMessage }> = (props) => {
                               </label>
                               <Field name={`fields.${index()}.value`}>
                                 {(valueField, valueFieldProps) => {
-                                  console.log(valueFieldProps);
                                   return (
                                     <Input
                                       {...valueFieldProps}

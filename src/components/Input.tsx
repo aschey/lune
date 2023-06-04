@@ -4,7 +4,7 @@ import { Component, JSX } from "solid-js";
 
 export interface InputProps {
   type?: "text" | "number";
-  ref: (element: HTMLInputElement) => void;
+  ref?: (element: HTMLInputElement) => void;
   value?: string | number | string[] | undefined;
   onInput: JSX.EventHandler<HTMLInputElement, InputEvent>;
   onChange: JSX.EventHandler<HTMLInputElement, Event>;
@@ -12,9 +12,14 @@ export interface InputProps {
 }
 
 export const Input: Component<InputProps> = (props) => {
+  let inputRef: HTMLInputElement;
+
   const input = (
     <input
-      ref={props.ref}
+      ref={(el) => {
+        inputRef = el;
+        props.ref?.(el);
+      }}
       value={props.value ?? ""}
       type={props.type}
       onInput={props.onInput}
@@ -25,12 +30,26 @@ export const Input: Component<InputProps> = (props) => {
     />
   );
 
+  const handleButtonChange = (changeVal: number) => {
+    const value =
+      inputRef.value == null || inputRef.value == ""
+        ? 0
+        : parseFloat(inputRef.value as string) + changeVal;
+    inputRef.value = value.toString();
+
+    props.onChange({
+      ...new Event("change"),
+      currentTarget: inputRef,
+      target: inputRef,
+    });
+  };
+
   if (props.type === "number") {
     return (
       <span style={{ position: "relative" }}>
         {input}
         <span
-          class="hidden peer-focus:block"
+          class="hidden hover:block peer-focus:block"
           style={{
             position: "absolute",
             right: "0.5rem",
@@ -44,10 +63,20 @@ export const Input: Component<InputProps> = (props) => {
               "font-size": "0.8em",
             }}
           >
-            <button class="text-base-content rounded hover:bg-base-content hover:bg-opacity-30">
+            <button
+              class="group text-base-content rounded hover:bg-base-content hover:bg-opacity-30"
+              onClick={() => {
+                handleButtonChange(1);
+              }}
+            >
               <Fa icon={faAngleUp} />
             </button>
-            <button class="text-base-content rounded hover:bg-base-content hover:bg-opacity-30">
+            <button
+              class="text-base-content rounded hover:bg-base-content hover:bg-opacity-30"
+              onClick={() => {
+                handleButtonChange(-1);
+              }}
+            >
               <Fa icon={faAngleDown} />
             </button>
           </div>
