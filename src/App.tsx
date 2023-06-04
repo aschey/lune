@@ -17,17 +17,16 @@ const App = () => {
     { name: "service 3", children: ["method 1"] },
   ];
   const protoRequest: ProtoMessage = {
-    fields: [
-      {
-        name: "test",
+    fields: {
+      test: {
         type: Type.Float,
       },
-      {
-        name: "test2",
+      test2: {
         type: Type.String,
       },
-    ],
+    },
   };
+
   return (
     <div class="flex container pt-1 pl-1">
       <div class="w-60 text-center ">

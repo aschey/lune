@@ -1,6 +1,7 @@
 import { Component, For, createEffect } from "solid-js";
 import { Card } from "./Card";
 import { createForm, insert } from "@modular-forms/solid";
+import { Input } from "./Input";
 
 export enum Label {
   Optional = 1,
@@ -44,14 +45,13 @@ export enum Type {
 }
 
 export interface ProtoField {
-  name: string;
   label?: Label;
   type: Type;
   typeName?: string;
 }
 
 export interface ProtoMessage {
-  fields: ProtoField[];
+  fields: Record<string, ProtoField>;
 }
 
 type ProtoForm = {
@@ -62,7 +62,10 @@ type ProtoForm = {
 export const GrpcRequest: Component<{ message: ProtoMessage }> = (props) => {
   const [loginForm, { Form, Field, FieldArray }] = createForm<ProtoForm>({
     initialValues: {
-      fields: props.message.fields.map((f) => ({ label: f.name, value: "" })),
+      fields: Object.keys(props.message.fields).map((f) => ({
+        label: f,
+        value: "",
+      })),
     },
   });
 
@@ -71,29 +74,41 @@ export const GrpcRequest: Component<{ message: ProtoMessage }> = (props) => {
       <Form onSubmit={() => {}}>
         <FieldArray name="fields">
           {(fieldArray) => {
-            console.log("field array", fieldArray);
             return (
               <For each={fieldArray.items}>
-                {(item, index) => {
-                  console.log("a", item, index());
+                {(_, index) => {
                   return (
                     <div class="py-1">
                       <Field name={`fields.${index()}.label`}>
-                        {(field, _) => (
-                          <label class="label inline-block text-right py-1 px-2 w-20">
-                            <span class="label-text">{field.value}</span>
-                          </label>
-                        )}
-                      </Field>
-                      <Field name={`fields.${index()}.value`}>
-                        {(field, props) => (
-                          <input
-                            {...props}
-                            value={field.value}
-                            type="text"
-                            class="input-bordered input-sm border border-base-content border-opacity-40 bg-base-100 rounded-btn text-base focus-visible:ring-1 ring-secondary focus:outline-none"
-                          />
-                        )}
+                        {(labelField, _) => {
+                          const protoMessage =
+                            props.message.fields[labelField.value || ""];
+                          return (
+                            <>
+                              <label class="label inline-block text-right py-1 px-2 w-20">
+                                <span class="label-text">
+                                  {labelField.value}
+                                </span>
+                              </label>
+                              <Field name={`fields.${index()}.value`}>
+                                {(valueField, valueFieldProps) => {
+                                  console.log(valueFieldProps);
+                                  return (
+                                    <Input
+                                      {...valueFieldProps}
+                                      value={valueField.value}
+                                      type={
+                                        protoMessage.type === Type.Float
+                                          ? "number"
+                                          : "text"
+                                      }
+                                    />
+                                  );
+                                }}
+                              </Field>
+                            </>
+                          );
+                        }}
                       </Field>
                     </div>
                   );

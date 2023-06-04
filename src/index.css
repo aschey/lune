@@ -2,8 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer components {
-  .link-highlight {
-    @apply link link-hover hover:text-accent hover:bg-base-content hover:bg-opacity-10 rounded;
-  }
+/* hide default numeric input spinner */
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
 }
