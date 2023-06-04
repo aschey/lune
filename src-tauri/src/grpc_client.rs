@@ -7,7 +7,10 @@ use http::{
 use hyper::client::HttpConnector;
 use hyper_rustls::{HttpsConnector, HttpsConnectorBuilder};
 use once_cell::sync::Lazy;
-use prost_reflect::{prost::Message, prost_types::FileDescriptorProto, DescriptorPool};
+use prost_reflect::{
+    prost::Message, prost_types::FileDescriptorProto, DescriptorPool, DynamicMessage,
+    MessageDescriptor, ReflectMessage,
+};
 use tokio::{stream, sync::mpsc};
 use tokio_stream::{wrappers::ReceiverStream, StreamExt};
 use tonic::{client::Grpc, transport::Channel, IntoRequest};
@@ -66,10 +69,44 @@ impl Client {
                 .unwrap();
                 let reflect_data = reflect_stream.next().await.unwrap().unwrap();
                 let response = reflect_data.message_response.unwrap();
+                let mut pool = DescriptorPool::global();
+
                 if let MessageResponse::FileDescriptorResponse(descriptors) = response {
                     for descriptor in descriptors.file_descriptor_proto {
                         let decoded = FileDescriptorProto::decode(&*descriptor).unwrap();
-                        println!("{:?}", decoded.service);
+
+                        pool.add_file_descriptor_proto(decoded.clone()).unwrap();
+
+                        println!("Name: {}", decoded.name());
+                        println!("Options: {:?}", decoded.options);
+                        println!("Package: {}", decoded.package());
+                        println!("Enum types: {:#?}", decoded.enum_type);
+
+                        println!("Message types");
+                        for message_type in decoded.message_type {
+                            println!("Message {:?}", message_type.name());
+                            for field in message_type.field {
+                                println!("{field:#?}");
+                            }
+                        }
+
+                        println!("Dependencies");
+                        for d in decoded.dependency {
+                            println!("    {d}")
+                        }
+                        println!("Services");
+
+                        for service in decoded.service {
+                            for method in service.method {
+                                println!("    {method:#?}");
+                            }
+                        }
+                    }
+                }
+
+                for service in pool.services() {
+                    for method in service.methods() {
+                        make_template_message(method.input());
                     }
                 }
             }
@@ -143,6 +180,37 @@ impl Client {
             .await
             .unwrap()
             .into_inner()
+    }
+}
+
+fn make_template_message(desc: MessageDescriptor) -> DynamicMessage {
+    let mut message = DynamicMessage::new(desc);
+
+    for field in message.descriptor().fields() {
+        match message.get_field_mut(&field) {
+            prost_reflect::Value::List(ref mut list) => {
+                list.push(make_template_field(field.kind()));
+            }
+            prost_reflect::Value::Map(ref mut map) => {
+                let kind = field.kind();
+                let entry = kind.as_message().unwrap();
+                let key = prost_reflect::MapKey::default_value(&entry.map_entry_key_field().kind());
+                let value = make_template_field(entry.map_entry_value_field().kind());
+                map.insert(key, value);
+            }
+            _ => (),
+        }
+    }
+
+    message
+}
+
+fn make_template_field(kind: prost_reflect::Kind) -> prost_reflect::Value {
+    match kind {
+        prost_reflect::Kind::Message(message) => {
+            prost_reflect::Value::Message(make_template_message(message))
+        }
+        kind => prost_reflect::Value::default_value(&kind),
     }
 }
 
