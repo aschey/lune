@@ -78,38 +78,30 @@ export const GrpcRequest: Component<{ message: ProtoMessage }> = (props) => {
               <For each={fieldArray.items}>
                 {(_, index) => {
                   return (
-                    <div class="py-1">
-                      <Field name={`fields.${index()}.label`}>
-                        {(labelField, _) => {
-                          const protoMessage =
-                            props.message.fields[labelField.value || ""];
-                          return (
-                            <>
-                              <label class="label inline-block text-right py-1 px-2 w-20">
-                                <span class="label-text">
-                                  {labelField.value}
-                                </span>
-                              </label>
-                              <Field name={`fields.${index()}.value`}>
-                                {(valueField, valueFieldProps) => {
-                                  return (
-                                    <Input
-                                      {...valueFieldProps}
-                                      value={valueField.value}
-                                      type={
-                                        protoMessage.type === Type.Float
-                                          ? "number"
-                                          : "text"
-                                      }
-                                    />
-                                  );
-                                }}
-                              </Field>
-                            </>
-                          );
-                        }}
-                      </Field>
-                    </div>
+                    <Field name={`fields.${index()}.label`}>
+                      {(labelField, _) => {
+                        const protoMessage =
+                          props.message.fields[labelField.value || ""];
+                        return (
+                          <Field name={`fields.${index()}.value`}>
+                            {(valueField, valueFieldProps) => {
+                              return (
+                                <Input
+                                  label={labelField.value ?? ""}
+                                  {...valueFieldProps}
+                                  value={valueField.value}
+                                  type={
+                                    protoMessage.type === Type.Float
+                                      ? "number"
+                                      : "text"
+                                  }
+                                />
+                              );
+                            }}
+                          </Field>
+                        );
+                      }}
+                    </Field>
                   );
                 }}
               </For>
