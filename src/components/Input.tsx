@@ -84,7 +84,7 @@ const CheckboxInput: Component<{ name: string; label: string }> = (props) => {
           class="peer w-0 h-0"
         />
         <span class="absolute top-4 left-[0.6em] transform origin-[0%_100%] peer-checked:animate-[checkbox-check_125ms_150ms_cubic-bezier(.4,.0,.23,1)_forwards]"></span>
-        <span class="flex border-base-content mr-4 justify-center items-center w-6 h-6 border-2 rounded transition-all peer-checked:border-[0.75em] peer-checked:border-primary peer-checked:animate-[shrink-bounce-in_150ms_cubic-bezier(.4,.0,.2,1)] peer-[:not(checked)]:animate-[shrink-bounce-out_150ms_cubic-bezier(.4,.0,.2,1)]"></span>
+        <span class="flex border-base-content mr-3 justify-center items-center w-6 h-6 border-2 rounded transition-all peer-checked:border-[0.75em] peer-checked:border-primary peer-checked:animate-[shrink-bounce-in_150ms_cubic-bezier(.4,.0,.2,1)] peer-[:not(checked)]:animate-[shrink-bounce-out_150ms_cubic-bezier(.4,.0,.2,1)]"></span>
         {props.label}
       </label>
     </div>

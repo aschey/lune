@@ -93,7 +93,7 @@ export const GrpcRequest: Component<{ message: ProtoMessage }> = (props) => {
   });
 
   return (
-    <Card class="h-full">
+    <Card class="h-full p-2">
       <Form onSubmit={() => {}}>
         <FieldArray name="fields">
           {(fieldArray) => {
