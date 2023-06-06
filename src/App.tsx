@@ -24,6 +24,9 @@ const App = () => {
       test2: {
         type: Type.String,
       },
+      test3: {
+        type: Type.Bool,
+      },
     },
   };
 

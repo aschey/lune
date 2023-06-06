@@ -7,18 +7,18 @@ import Fa from "solid-fa";
 import { Component, JSX, createSignal } from "solid-js";
 
 export interface InputProps {
-  type?: "text" | "number";
+  type?: "text" | "number" | "checkbox";
   name: string;
   label: string;
   ref?: (element: HTMLInputElement) => void;
   value?: string | number | string[] | undefined;
-  onInput: JSX.EventHandler<HTMLInputElement, InputEvent>;
-  onChange: JSX.EventHandler<HTMLInputElement, Event>;
-  onBlur: JSX.EventHandler<HTMLInputElement, FocusEvent>;
+  onInput?: JSX.EventHandler<HTMLInputElement, InputEvent>;
+  onChange?: JSX.EventHandler<HTMLInputElement, Event>;
+  onBlur?: JSX.EventHandler<HTMLInputElement, FocusEvent>;
 }
 
 export const Input: Component<InputProps> = (props) => {
-  let inputRef: HTMLInputElement;
+  let inputRef: HTMLInputElement | undefined = undefined;
   const [btnMouseDown, setBtnMouseDown] = createSignal(false);
 
   const input = (
@@ -30,6 +30,7 @@ export const Input: Component<InputProps> = (props) => {
         }}
         placeholder=" "
         name={props.name}
+        id={props.name}
         value={props.value ?? ""}
         type={props.type}
         onInput={props.onInput}
@@ -50,50 +51,92 @@ export const Input: Component<InputProps> = (props) => {
     </>
   );
 
-  const handleButtonChange = (changeVal: number) => {
-    const value =
-      inputRef.value == null || inputRef.value == ""
-        ? 0
-        : parseFloat(inputRef.value as string) + changeVal;
-    inputRef.value = value.toString();
+  switch (props.type) {
+    case "number":
+      return (
+        <NumberInput
+          input={input}
+          inputRef={inputRef}
+          onChange={props.onChange}
+          onMouseDown={() => setBtnMouseDown(true)}
+          onMouseUp={() => setBtnMouseDown(false)}
+        />
+      );
+    case "checkbox":
+      return <CheckboxInput name={props.name} label={props.label} />;
+    default:
+      return (
+        <div class="py-1 flex">
+          <span class="relative">{input}</span>
+        </div>
+      );
+  }
+};
 
-    props.onChange({
+const CheckboxInput: Component<{ name: string; label: string }> = (props) => {
+  return (
+    <div class="py-1 flex">
+      <label for={props.name} class="flex cursor-pointer relative p-1">
+        <input
+          id={props.name}
+          name={props.name}
+          type="checkbox"
+          class="peer w-0 h-0"
+        />
+        <span class="absolute top-4 left-[0.6em] transform origin-[0%_100%] peer-checked:animate-[checkbox-check_125ms_150ms_cubic-bezier(.4,.0,.23,1)_forwards]"></span>
+        <span class="flex border-base-content mr-4 justify-center items-center w-6 h-6 border-2 rounded transition-all peer-checked:border-[0.75em] peer-checked:border-primary peer-checked:animate-[shrink-bounce-in_150ms_cubic-bezier(.4,.0,.2,1)] peer-[:not(checked)]:animate-[shrink-bounce-out_150ms_cubic-bezier(.4,.0,.2,1)]"></span>
+        {props.label}
+      </label>
+    </div>
+  );
+};
+
+const NumberInput: Component<{
+  onChange?: JSX.EventHandler<HTMLInputElement, Event>;
+  onMouseDown: () => void;
+  onMouseUp: () => void;
+  input: JSX.Element;
+  inputRef: HTMLInputElement | undefined;
+}> = (props) => {
+  const handleButtonChange = (changeVal: number) => {
+    if (!props.inputRef) {
+      return;
+    }
+    const value =
+      props.inputRef.value == null || props.inputRef.value == ""
+        ? 0
+        : parseFloat(props.inputRef.value as string) + changeVal;
+    props.inputRef.value = value.toString();
+
+    props.onChange?.({
       ...new Event("change"),
-      currentTarget: inputRef,
-      target: inputRef,
+      currentTarget: props.inputRef,
+      target: props.inputRef,
     });
   };
 
-  if (props.type === "number") {
-    return (
-      <div class="py-1 flex">
-        <span class="relative">
-          {input}
-          <span class="hidden absolute right-2 top-[0.6rem] hover:block peer-focus:block">
-            <div class="flex flex-col">
-              <SpinnerButton
-                onMouseDown={() => setBtnMouseDown(true)}
-                onMouseUp={() => setBtnMouseDown(false)}
-                icon={faAngleUp}
-                onClick={() => handleButtonChange(1)}
-              />
-
-              <SpinnerButton
-                onMouseDown={() => setBtnMouseDown(true)}
-                onMouseUp={() => setBtnMouseDown(false)}
-                icon={faAngleDown}
-                onClick={() => handleButtonChange(-1)}
-              />
-            </div>
-          </span>
-        </span>
-      </div>
-    );
-  }
-
   return (
     <div class="py-1 flex">
-      <span class="relative">{input}</span>
+      <span class="relative">
+        {props.input}
+        <span class="hidden absolute right-2 top-[0.6rem] hover:block peer-focus:block">
+          <div class="flex flex-col">
+            <SpinnerButton
+              onMouseDown={props.onMouseDown}
+              onMouseUp={props.onMouseUp}
+              icon={faAngleUp}
+              onClick={() => handleButtonChange(1)}
+            />
+
+            <SpinnerButton
+              onMouseDown={props.onMouseDown}
+              onMouseUp={props.onMouseUp}
+              icon={faAngleDown}
+              onClick={() => handleButtonChange(-1)}
+            />
+          </div>
+        </span>
+      </span>
     </div>
   );
 };
@@ -104,6 +147,7 @@ interface SpinnerProps {
   onClick: () => void;
   icon: IconDefinition;
 }
+
 const SpinnerButton: Component<SpinnerProps> = (props) => (
   <button
     onMouseDown={props.onMouseDown}

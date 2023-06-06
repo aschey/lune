@@ -3,7 +3,53 @@ import { Tokens } from "./.mirrorful/theme";
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
-  theme: {},
+  theme: {
+    extend: {
+      keyframes: {
+        "shrink-bounce-in": {
+          "0%": {
+            transform: "scale(1.0)",
+          },
+          "33%": {
+            transform: "scale(0.8)",
+          },
+          "100%": {
+            transform: "scale(1.0)",
+          },
+        },
+        "shrink-bounce-out": {
+          "0%": {
+            transform: "scale(1.0)",
+          },
+          "33%": {
+            transform: "scale(0.8)",
+          },
+          "100%": {
+            transform: "scale(1.0)",
+          },
+        },
+        "checkbox-check": {
+          "0%": {
+            width: 0,
+            height: 0,
+            transform: "translate3d(0,0,0) rotate(45deg)",
+          },
+          "33%": {
+            width: "0.45em",
+            height: 0,
+            transform: "translate3d(0,0,0) rotate(45deg)",
+          },
+          "100%": {
+            width: "0.45em",
+            height: "0.9em",
+            "border-right": `3px solid ${Tokens.colors.background["base"]}`,
+            "border-bottom": `3px solid ${Tokens.colors.background["base"]}`,
+            transform: "translate3d(0,-0.75em,0) rotate(45deg)",
+          },
+        },
+      },
+    },
+  },
   plugins: [
     require("@kobalte/tailwindcss")({ prefix: "kb" }),
     require("daisyui"),

@@ -59,6 +59,29 @@ type ProtoForm = {
   fields: { label: string; value: string }[];
 };
 
+const getInputType = (type: Type) => {
+  switch (type) {
+    case Type.Double:
+    case Type.Float:
+    case Type.Int64:
+    case Type.Uint64:
+    case Type.Int32:
+    case Type.Fixed64:
+    case Type.Fixed32:
+    case Type.Sfixed64:
+    case Type.Sfixed32:
+    case Type.Sint64:
+    case Type.Sint32:
+      return "number";
+    case Type.Bool:
+      return "checkbox";
+    case Type.String:
+      return "text";
+    default:
+      return "text";
+  }
+};
+
 export const GrpcRequest: Component<{ message: ProtoMessage }> = (props) => {
   const [loginForm, { Form, Field, FieldArray }] = createForm<ProtoForm>({
     initialValues: {
@@ -90,11 +113,7 @@ export const GrpcRequest: Component<{ message: ProtoMessage }> = (props) => {
                                   label={labelField.value ?? ""}
                                   {...valueFieldProps}
                                   value={valueField.value}
-                                  type={
-                                    protoMessage.type === Type.Float
-                                      ? "number"
-                                      : "text"
-                                  }
+                                  type={getInputType(protoMessage.type)}
                                 />
                               );
                             }}

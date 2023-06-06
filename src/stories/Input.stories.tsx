@@ -25,3 +25,11 @@ export const Number: Story = {
     label: "text",
   },
 };
+
+export const Checkbox: Story = {
+  args: {
+    type: "checkbox",
+    name: "checkbox",
+    label: "text",
+  },
+};
