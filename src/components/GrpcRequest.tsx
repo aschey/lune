@@ -1,7 +1,8 @@
 import { Component, For, createEffect } from "solid-js";
 import { Card } from "./Card";
-import { createForm, insert } from "@modular-forms/solid";
+import { FieldElementProps, createForm, insert } from "@modular-forms/solid";
 import { Input } from "./Input";
+import { TextArea } from "./TextArea";
 
 export enum Label {
   Optional = 1,
@@ -55,31 +56,7 @@ export interface ProtoMessage {
 }
 
 type ProtoForm = {
-  // test: string;
   fields: { label: string; value: string }[];
-};
-
-const getInputType = (type: Type) => {
-  switch (type) {
-    case Type.Double:
-    case Type.Float:
-    case Type.Int64:
-    case Type.Uint64:
-    case Type.Int32:
-    case Type.Fixed64:
-    case Type.Fixed32:
-    case Type.Sfixed64:
-    case Type.Sfixed32:
-    case Type.Sint64:
-    case Type.Sint32:
-      return "number";
-    case Type.Bool:
-      return "checkbox";
-    case Type.String:
-      return "text";
-    default:
-      return "text";
-  }
 };
 
 export const GrpcRequest: Component<{ message: ProtoMessage }> = (props) => {
@@ -108,14 +85,58 @@ export const GrpcRequest: Component<{ message: ProtoMessage }> = (props) => {
                         return (
                           <Field name={`fields.${index()}.value`}>
                             {(valueField, valueFieldProps) => {
-                              return (
-                                <Input
-                                  label={labelField.value ?? ""}
-                                  {...valueFieldProps}
-                                  value={valueField.value}
-                                  type={getInputType(protoMessage.type)}
-                                />
-                              );
+                              switch (protoMessage.type) {
+                                case Type.Double:
+                                case Type.Float:
+                                case Type.Int64:
+                                case Type.Uint64:
+                                case Type.Int32:
+                                case Type.Fixed64:
+                                case Type.Fixed32:
+                                case Type.Sfixed64:
+                                case Type.Sfixed32:
+                                case Type.Sint64:
+                                case Type.Sint32:
+                                  return (
+                                    <Input
+                                      label={labelField.value ?? ""}
+                                      {...valueFieldProps}
+                                      value={valueField.value}
+                                      type={"number"}
+                                    />
+                                  );
+                                case Type.Bool:
+                                  return (
+                                    <Input
+                                      label={labelField.value ?? ""}
+                                      {...valueFieldProps}
+                                      value={valueField.value}
+                                      type={"checkbox"}
+                                    />
+                                  );
+                                case Type.Bytes:
+                                  return (
+                                    <TextArea label={labelField.value ?? ""} />
+                                  );
+                                case Type.String:
+                                  return (
+                                    <Input
+                                      label={labelField.value ?? ""}
+                                      {...valueFieldProps}
+                                      value={valueField.value}
+                                      type={"text"}
+                                    />
+                                  );
+                                default:
+                                  return (
+                                    <Input
+                                      label={labelField.value ?? ""}
+                                      {...valueFieldProps}
+                                      value={valueField.value}
+                                      type={"text"}
+                                    />
+                                  );
+                              }
                             }}
                           </Field>
                         );

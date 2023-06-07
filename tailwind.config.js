@@ -5,7 +5,7 @@ module.exports = {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
-      keyframes: {
+      keyframes: ({ theme }) => ({
         "shrink-bounce-in": {
           "0%": {
             transform: "scale(1.0)",
@@ -42,12 +42,12 @@ module.exports = {
           "100%": {
             width: "0.45em",
             height: "0.9em",
-            "border-right": `3px solid ${Tokens.colors.background["base"]}`,
-            "border-bottom": `3px solid ${Tokens.colors.background["base"]}`,
-            transform: "translate3d(0,-0.75em,0) rotate(45deg)",
+            "border-right": `3px solid ${theme("colors.base-100")}`,
+            "border-bottom": `3px solid ${theme("colors.base-100")}`,
+            transform: "translate3d(-0.1em,-0.75em,0) rotate(45deg)",
           },
         },
-      },
+      }),
     },
   },
   plugins: [

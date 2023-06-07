@@ -36,8 +36,7 @@ export const Input: Component<InputProps> = (props) => {
         onInput={props.onInput}
         onChange={props.onChange}
         onBlur={props.onBlur}
-        class="peer input-bordered input-md border border-base-content border-opacity-40 bg-base-100 rounded-btn text-base focus-visible:ring-1 ring-secondary focus:outline-none z-1"
-        style={{ "padding-top": "1rem" }}
+        class="peer input-bordered input-md pt-4 border border-base-content border-opacity-40 bg-base-100 rounded-btn text-base focus-visible:ring-1 ring-secondary focus:outline-none z-1"
       />
       <label
         class={`absolute top-3 left-0 pl-4 text-base-content scale-90 -translate-y-3 transition-transform ${

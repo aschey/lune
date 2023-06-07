@@ -2,15 +2,21 @@
 @tailwind components;
 @tailwind utilities;
 
-/* hide default numeric input spinner */
-/* Chrome, Safari, Edge, Opera */
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
+@layer components {
+  /* hide default numeric input spinner */
+  /* Chrome, Safari, Edge, Opera */
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
 
-/* Firefox */
-input[type="number"] {
-  -moz-appearance: textfield;
+  /* Firefox */
+  input[type="number"] {
+    -moz-appearance: textfield;
+  }
+
+  ::-webkit-resizer {
+    @apply border-8 border-solid border-r-base-content border-b-base-content border-t-transparent border-l-transparent border-opacity-20;
+  }
 }

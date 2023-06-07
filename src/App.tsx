@@ -27,6 +27,9 @@ const App = () => {
       test3: {
         type: Type.Bool,
       },
+      test4: {
+        type: Type.Bytes,
+      },
     },
   };
 
