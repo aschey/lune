@@ -6,6 +6,7 @@ import { Tab, Tabs } from "./components/Tabs";
 import { Card } from "./components/Card";
 import { GrpcRequest, ProtoMessage, Type } from "./components/GrpcRequest";
 import { Expander, ExpanderNodeProps } from "./components/Expander";
+import { InputList } from "./components/InputList";
 
 const App = () => {
   const services: ExpanderNodeProps[] = [
@@ -46,7 +47,7 @@ const App = () => {
         </div>
         <div class="divider divider-horizontal before:bg-neutral after:bg-neutral" />
         <div class="w-1/2">
-          <Card>hi</Card>
+          <Card>{/* <InputList items={[]} onAdd={() => {}} /> */}</Card>
         </div>
       </div>
     </div>

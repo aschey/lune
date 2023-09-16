@@ -42,8 +42,14 @@ module.exports = {
           "100%": {
             width: "0.45em",
             height: "0.9em",
-            "border-right": `3px solid ${theme("colors.base-100")}`,
-            "border-bottom": `3px solid ${theme("colors.base-100")}`,
+            "border-right": `3px solid ${theme("colors.base-100").replace(
+              "<alpha-value>",
+              "100%"
+            )}`,
+            "border-bottom": `3px solid ${theme("colors.base-100").replace(
+              "<alpha-value>",
+              "100%"
+            )}`,
             transform: "translate3d(-0.1em,-0.75em,0) rotate(45deg)",
           },
         },

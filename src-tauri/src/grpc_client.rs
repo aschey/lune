@@ -189,11 +189,19 @@ fn make_template_message(desc: MessageDescriptor) -> DynamicMessage {
     for field in message.descriptor().fields() {
         match message.get_field_mut(&field) {
             prost_reflect::Value::List(ref mut list) => {
+                println!("list entry {:?}", field.kind());
                 list.push(make_template_field(field.kind()));
             }
             prost_reflect::Value::Map(ref mut map) => {
                 let kind = field.kind();
                 let entry = kind.as_message().unwrap();
+                println!(
+                    "map entry {:?} {:?} {:?}",
+                    field.kind(),
+                    entry.map_entry_key_field().kind(),
+                    entry.map_entry_value_field().kind()
+                );
+
                 let key = prost_reflect::MapKey::default_value(&entry.map_entry_key_field().kind());
                 let value = make_template_field(entry.map_entry_value_field().kind());
                 map.insert(key, value);

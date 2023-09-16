@@ -49,6 +49,9 @@ export interface ProtoField {
   label?: Label;
   type: Type;
   typeName?: string;
+  listType?: Type;
+  mapKeyType?: Type;
+  mapValueType?: Type;
 }
 
 export interface ProtoMessage {

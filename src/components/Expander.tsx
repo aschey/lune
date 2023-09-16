@@ -16,7 +16,7 @@ export interface ExpanderProps {
 
 export const Expander: Component<ExpanderProps> = (props) => {
   return (
-    <ul class="menu py-1">
+    <ul class="py-1">
       <For each={props.nodes}>
         {(props) => {
           return <ExpanderNode {...props} />;
@@ -37,14 +37,14 @@ const ExpanderChild: Component<{ isOpen: boolean; children: string[] }> = (
       } `}
     >
       <ul
-        class={`transition-[visibility] duration-200 min-h-0 ${
+        class={`flex flex-col items-start transition-[visibility] duration-200 min-h-0 ${
           props.isOpen ? "visible" : "invisible"
         }`}
       >
         <For each={props.children}>
           {(m) => (
-            <li class="">
-              <Link class="pl-12 py-2">{m}</Link>
+            <li class="flex items-start w-full">
+              <Link class="py-2 w-full text-left pl-12">{m}</Link>
             </li>
           )}
         </For>
@@ -58,7 +58,7 @@ const ExpanderNode: Component<ExpanderNodeProps> = (props) => {
   return (
     <li class="px-1">
       <Link
-        class="p-2"
+        class="p-2 flex"
         onClick={() => {
           setIsExpanded((e) => !e);
         }}
@@ -66,7 +66,7 @@ const ExpanderNode: Component<ExpanderNodeProps> = (props) => {
         <Fa
           icon={faAngleRight}
           class={`mt-1 mr-3 transition-transform duration-200 transform ${
-            isExpanded() ? "rotate-90" : ""
+            isExpanded() && "rotate-90"
           }`}
         />
         {props.name}

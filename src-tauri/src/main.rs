@@ -15,10 +15,10 @@ fn greet(name: &str) -> String {
 
 #[tokio::main]
 async fn main() {
-    let client = Client::new("http://localhost:50051".parse().unwrap(), false).await;
-    client.reflect().await;
-    // tauri::Builder::default()
-    //     .invoke_handler(tauri::generate_handler![greet])
-    //     .run(tauri::generate_context!())
-    //     .expect("error while running tauri application");
+    // let client = Client::new("http://localhost:5051".parse().unwrap(), false).await;
+    // client.reflect().await;
+    tauri::Builder::default()
+        .invoke_handler(tauri::generate_handler![greet])
+        .run(tauri::generate_context!())
+        .expect("error while running tauri application");
 }

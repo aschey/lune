@@ -9,7 +9,7 @@ import { Component, JSX, createSignal } from "solid-js";
 export interface InputProps {
   type?: "text" | "number" | "checkbox";
   name: string;
-  label: string;
+  label?: string;
   ref?: (element: HTMLInputElement) => void;
   value?: string | number | string[] | undefined;
   onInput?: JSX.EventHandler<HTMLInputElement, InputEvent>;
@@ -36,17 +36,21 @@ export const Input: Component<InputProps> = (props) => {
         onInput={props.onInput}
         onChange={props.onChange}
         onBlur={props.onBlur}
-        class="peer input-bordered input-md pt-4 border border-base-content border-opacity-40 bg-base-100 rounded-btn text-base focus-visible:ring-1 ring-secondary focus:outline-none z-1"
+        class={`peer input-bordered input-md ${
+          props.label && "pt-4"
+        } border border-base-content border-opacity-40 bg-base-100 rounded-btn text-base focus-visible:ring-1 ring-secondary focus:outline-none z-1`}
       />
-      <label
-        class={`absolute top-3 left-0 pl-4 text-base-content scale-90 -translate-y-3 transition-transform ${
-          !btnMouseDown() &&
-          "peer-focus:scale-90 peer-focus:-translate-y-3 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0"
-        }`}
-        for={props.name}
-      >
-        {props.label}
-      </label>
+      {props.label && (
+        <label
+          class={`absolute top-3 left-0 pl-4 text-base-content scale-90 -translate-y-3 transition-transform ${
+            !btnMouseDown() &&
+            "peer-focus:scale-90 peer-focus:-translate-y-3 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0"
+          }`}
+          for={props.name}
+        >
+          {props.label}
+        </label>
+      )}
     </>
   );
 
@@ -72,7 +76,7 @@ export const Input: Component<InputProps> = (props) => {
   }
 };
 
-const CheckboxInput: Component<{ name: string; label: string }> = (props) => {
+const CheckboxInput: Component<{ name: string; label?: string }> = (props) => {
   return (
     <div class="py-1 flex">
       <label for={props.name} class="flex cursor-pointer relative p-1">
