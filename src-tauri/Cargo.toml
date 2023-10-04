@@ -24,7 +24,7 @@ once_cell = "1.18.0"
 hyper = "0.14.27"
 rustls = { version = "0.21.7", features = ["dangerous_configuration"] }
 tokio = { version = "1.32.0", features = ["rt-multi-thread", "macros", "time"] }
-tonic-reflection = "0.10.0"
+tonic-reflection = "0.10.2"
 tokio-stream = { version = "0.1.14", features = ["sync"] }
 futures = "0.3.28"
 
