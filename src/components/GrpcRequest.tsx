@@ -1,8 +1,9 @@
-import { Component, For, createEffect } from "solid-js";
+import { Component, For, createEffect, createSignal } from "solid-js";
 import { Card } from "./Card";
 import { FieldElementProps, createForm, insert } from "@modular-forms/solid";
 import { Input } from "./Input";
 import { TextArea } from "./TextArea";
+import { InputList, InputListItem } from "./InputList";
 
 export enum Label {
   Optional = 1,
@@ -62,6 +63,33 @@ type ProtoForm = {
   fields: { label: string; value: string }[];
 };
 
+const toInputType = (
+  type: Type
+): "number" | "text" | "checkbox" | undefined => {
+  switch (type) {
+    case Type.Double:
+    case Type.Float:
+    case Type.Int64:
+    case Type.Uint64:
+    case Type.Int32:
+    case Type.Fixed64:
+    case Type.Fixed32:
+    case Type.Sfixed64:
+    case Type.Sfixed32:
+    case Type.Sint64:
+    case Type.Sint32:
+      return "number";
+    case Type.Bool:
+      return "checkbox";
+    case Type.String:
+      return "text";
+    case Type.Bytes:
+      return undefined;
+    default:
+      return "text";
+  }
+};
+
 export const GrpcRequest: Component<{ message: ProtoMessage }> = (props) => {
   const [loginForm, { Form, Field, FieldArray }] = createForm<ProtoForm>({
     initialValues: {
@@ -85,60 +113,43 @@ export const GrpcRequest: Component<{ message: ProtoMessage }> = (props) => {
                       {(labelField, _) => {
                         const protoMessage =
                           props.message.fields[labelField.value || ""];
+                        const inputType = toInputType(protoMessage.type);
                         return (
                           <Field name={`fields.${index()}.value`}>
                             {(valueField, valueFieldProps) => {
-                              switch (protoMessage.type) {
-                                case Type.Double:
-                                case Type.Float:
-                                case Type.Int64:
-                                case Type.Uint64:
-                                case Type.Int32:
-                                case Type.Fixed64:
-                                case Type.Fixed32:
-                                case Type.Sfixed64:
-                                case Type.Sfixed32:
-                                case Type.Sint64:
-                                case Type.Sint32:
-                                  return (
-                                    <Input
-                                      label={labelField.value ?? ""}
-                                      {...valueFieldProps}
-                                      value={valueField.value}
-                                      type={"number"}
-                                    />
-                                  );
-                                case Type.Bool:
-                                  return (
-                                    <Input
-                                      label={labelField.value ?? ""}
-                                      {...valueFieldProps}
-                                      value={valueField.value}
-                                      type={"checkbox"}
-                                    />
-                                  );
-                                case Type.Bytes:
-                                  return (
-                                    <TextArea label={labelField.value ?? ""} />
-                                  );
-                                case Type.String:
-                                  return (
-                                    <Input
-                                      label={labelField.value ?? ""}
-                                      {...valueFieldProps}
-                                      value={valueField.value}
-                                      type={"text"}
-                                    />
-                                  );
-                                default:
-                                  return (
-                                    <Input
-                                      label={labelField.value ?? ""}
-                                      {...valueFieldProps}
-                                      value={valueField.value}
-                                      type={"text"}
-                                    />
-                                  );
+                              if (protoMessage.label === Label.Repeated) {
+                                const [items, setItems] = createSignal<
+                                  InputListItem[]
+                                >([]);
+                                return (
+                                  <InputList
+                                    type={inputType!}
+                                    items={items()}
+                                    onAdd={() =>
+                                      setItems((i) => [
+                                        ...i,
+                                        {
+                                          name: `${labelField.value}.${i.length}`,
+                                          label: `${labelField.value}[${i.length}]`,
+                                        },
+                                      ])
+                                    }
+                                  />
+                                );
+                              }
+                              if (inputType) {
+                                return (
+                                  <Input
+                                    label={labelField.value ?? ""}
+                                    {...valueFieldProps}
+                                    value={valueField.value}
+                                    type={inputType}
+                                  />
+                                );
+                              } else {
+                                return (
+                                  <TextArea label={labelField.value ?? ""} />
+                                );
                               }
                             }}
                           </Field>

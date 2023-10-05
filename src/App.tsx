@@ -4,9 +4,14 @@ import { invoke } from "@tauri-apps/api/tauri";
 import { Tab, Tabs } from "./components/Tabs";
 // import { Service, Services } from "./components/Services";
 import { Card } from "./components/Card";
-import { GrpcRequest, ProtoMessage, Type } from "./components/GrpcRequest";
+import {
+  GrpcRequest,
+  Label,
+  ProtoMessage,
+  Type,
+} from "./components/GrpcRequest";
 import { Expander, ExpanderNodeProps } from "./components/Expander";
-import { InputList } from "./components/InputList";
+import { InputList, InputListItem } from "./components/InputList";
 
 const App = () => {
   const services: ExpanderNodeProps[] = [
@@ -31,8 +36,14 @@ const App = () => {
       test4: {
         type: Type.Bytes,
       },
+      test5: {
+        type: Type.Float,
+        label: Label.Repeated,
+      },
     },
   };
+
+  const [items, setItems] = createSignal<InputListItem[]>([]);
 
   return (
     <div class="flex container pt-1 pl-1">
@@ -47,7 +58,13 @@ const App = () => {
         </div>
         <div class="divider divider-horizontal before:bg-neutral after:bg-neutral" />
         <div class="w-1/2">
-          <Card>{/* <InputList items={[]} onAdd={() => {}} /> */}</Card>
+          <Card>
+            <InputList
+              type="text"
+              items={items()}
+              onAdd={() => setItems((i) => [...i, { name: "hi", label: "hi" }])}
+            />
+          </Card>
         </div>
       </div>
     </div>
