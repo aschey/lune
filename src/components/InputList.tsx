@@ -20,10 +20,10 @@ export interface InputListProps {
 export const InputList: Component<InputListProps> = (props) => {
   return (
     <div class="flex flex-col">
-      <div class="flex p-2">
+      <div class="flex m-3 items-center">
         {props.label || "Add"}
-        <Button class="px-2 ml-1" onClick={props.onAdd}>
-          <Fa icon={faPlus} class="text-success" />
+        <Button outlined class="mx-3 h-8 text-success" onClick={props.onAdd}>
+          <Fa icon={faPlus} />
         </Button>
       </div>
 
@@ -32,10 +32,11 @@ export const InputList: Component<InputListProps> = (props) => {
           <span class="flex">
             <div class="flex">
               <Button
-                class="py-0 my-2 mx-1"
+                outlined
+                class="mx-3 h-8 my-3 text-error"
                 onClick={() => props.onRemove(item, i())}
               >
-                <Fa icon={faX} class="text-base-content" />
+                <Fa icon={faX} />
               </Button>
             </div>
             <Input
