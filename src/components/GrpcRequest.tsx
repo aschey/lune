@@ -125,15 +125,23 @@ export const GrpcRequest: Component<{ message: ProtoMessage }> = (props) => {
                                   <InputList
                                     type={inputType!}
                                     items={items()}
+                                    label={labelField.value}
                                     onAdd={() =>
                                       setItems((i) => [
                                         ...i,
                                         {
-                                          name: `${labelField.value}.${i.length}`,
-                                          label: `${labelField.value}[${i.length}]`,
+                                          name: (i) =>
+                                            `${labelField.value}.${i}`,
+                                          label: (i) =>
+                                            `${labelField.value}[${i}]`,
                                         },
                                       ])
                                     }
+                                    onRemove={(item) => {
+                                      setItems((i) =>
+                                        i.filter((i) => i.name != item.name)
+                                      );
+                                    }}
                                   />
                                 );
                               }

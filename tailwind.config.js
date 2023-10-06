@@ -70,6 +70,8 @@ module.exports = {
           accent: Tokens.colors.purple["base"],
           neutral: Tokens.colors.background["400"],
           "neutral-content": Tokens.colors["light-blue"]["base"],
+          success: Tokens.colors["green"]["base"],
+          error: Tokens.colors["pink"]["base"],
           "base-100": Tokens.colors.background["base"],
           "base-200": Tokens.colors.background["500"],
           "base-300": Tokens.colors.background["600"],

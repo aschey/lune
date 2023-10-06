@@ -20,9 +20,12 @@ export const Docs: Story = {
         type="text"
         onAdd={() =>
           setItems((i) => [
-            { name: `item${i.length}`, label: `item${i.length}` },
+            { name: (i) => `item${i}`, label: (i) => `item${i}` },
             ...i,
           ])
+        }
+        onRemove={(item) =>
+          setItems((i) => i.filter((i) => i.name !== item.name))
         }
       />
     );
