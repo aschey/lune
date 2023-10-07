@@ -5,11 +5,13 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import Fa from "solid-fa";
 import { Component, JSX, createSignal } from "solid-js";
+import { twMerge } from "tailwind-merge";
 
 export interface InputProps {
   type?: "text" | "number" | "checkbox";
   name: string;
   label?: string;
+  fullWidth?: boolean;
   ref?: (element: HTMLInputElement) => void;
   value?: string | number | string[] | undefined;
   onInput?: JSX.EventHandler<HTMLInputElement, InputEvent>;
@@ -36,9 +38,11 @@ export const Input: Component<InputProps> = (props) => {
         onInput={props.onInput}
         onChange={props.onChange}
         onBlur={props.onBlur}
-        class={`peer input-bordered input-md ${
-          props.label && "pt-4"
-        } border border-base-content border-opacity-40 bg-base-100 rounded-btn text-base focus-visible:ring-1 ring-secondary focus:outline-none z-1`}
+        class={twMerge(
+          "peer input-bordered input-md border border-base-content border-opacity-40 bg-base-100 rounded-btn text-base focus-visible:ring-1 ring-secondary focus:outline-none z-1",
+          !!props.label ? "pt-4" : "",
+          props.fullWidth ? "w-full" : ""
+        )}
       />
       {props.label && (
         <label
@@ -60,6 +64,7 @@ export const Input: Component<InputProps> = (props) => {
         <NumberInput
           input={input}
           inputRef={inputRef}
+          fullWidth={props.fullWidth}
           onChange={props.onChange}
           onMouseDown={() => setBtnMouseDown(true)}
           onMouseUp={() => setBtnMouseDown(false)}
@@ -69,14 +74,19 @@ export const Input: Component<InputProps> = (props) => {
       return <CheckboxInput name={props.name} label={props.label} />;
     default:
       return (
-        <div class="py-1 flex">
-          <span class="relative">{input}</span>
+        <div class={twMerge("py-1 flex", props.fullWidth ? "w-full" : "")}>
+          <span class={twMerge("relative", props.fullWidth ? "w-full" : "")}>
+            {input}
+          </span>
         </div>
       );
   }
 };
 
-const CheckboxInput: Component<{ name: string; label?: string }> = (props) => {
+const CheckboxInput: Component<{
+  name: string;
+  label?: string;
+}> = (props) => {
   return (
     <div class="py-1 flex">
       <label for={props.name} class="flex cursor-pointer relative p-1">
@@ -100,6 +110,7 @@ const NumberInput: Component<{
   onMouseUp: () => void;
   input: JSX.Element;
   inputRef: HTMLInputElement | undefined;
+  fullWidth?: boolean;
 }> = (props) => {
   const handleButtonChange = (changeVal: number) => {
     if (!props.inputRef) {
@@ -119,8 +130,8 @@ const NumberInput: Component<{
   };
 
   return (
-    <div class="py-1 flex">
-      <span class="relative">
+    <div class={twMerge("py-1 flex", props.fullWidth ? "w-full" : "")}>
+      <span class={twMerge("relative", props.fullWidth ? "w-full" : "")}>
         {props.input}
         <span class="hidden absolute right-2 top-[0.6rem] hover:block peer-focus:block">
           <div class="flex flex-col">

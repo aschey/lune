@@ -59,11 +59,11 @@ const App = () => {
         <div class="divider divider-horizontal before:bg-neutral after:bg-neutral" />
         <div class="w-1/2">
           <Card>
-            <InputList
+            {/* <InputList
               type="text"
               items={items()}
               onAdd={() => setItems((i) => [...i, { name: "hi", label: "hi" }])}
-            />
+            /> */}
           </Card>
         </div>
       </div>

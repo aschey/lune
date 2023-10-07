@@ -1,10 +1,16 @@
 import { Component } from "solid-js";
+import { twMerge } from "tailwind-merge";
 
-export const TextArea: Component<{ label: string }> = (props) => {
+export const TextArea: Component<{ label: string; fullWidth?: boolean }> = (
+  props
+) => {
   return (
     <div class="rounded relative flex">
       <span
-        class="peer block pt-4 textarea w-56 overflow-hidden border border-base-100 resize focus-visible:ring-1 ring-secondary focus:outline-none rounded"
+        class={twMerge(
+          "peer block pt-4 textarea  overflow-hidden border border-base-100 resize focus-visible:ring-1 ring-secondary focus:outline-none rounded",
+          props.fullWidth ? "w-full" : "w-56"
+        )}
         role="textbox"
         contenteditable
       ></span>

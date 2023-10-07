@@ -13,6 +13,7 @@ export interface InputListProps {
   items: InputListItem[];
   type: "number" | "text" | "checkbox";
   label?: string;
+  fullWidth?: boolean;
   onAdd: () => void;
   onRemove: (item: InputListItem, index: number) => void;
 }
@@ -20,31 +21,36 @@ export interface InputListProps {
 export const InputList: Component<InputListProps> = (props) => {
   return (
     <div class="flex flex-col">
-      <div class="flex m-3 items-center">
-        {props.label || "Add"}
-        <Button outlined class="mx-3 h-8 text-success" onClick={props.onAdd}>
-          <Fa icon={faPlus} />
-        </Button>
+      <div class="flex m-3 w-full items-center justify-between">
+        <div class="flex">Test5</div>
+        <div class="flex mr-1">
+          <Button outlined class="mx-3 h-8 text-success" onClick={props.onAdd}>
+            <Fa icon={faPlus} />
+          </Button>
+        </div>
       </div>
 
       <For each={props.items}>
         {(item, i) => (
-          <span class="flex">
-            <div class="flex">
-              <Button
-                outlined
-                class="mx-3 h-8 my-3 text-error"
-                onClick={() => props.onRemove(item, i())}
-              >
-                <Fa icon={faX} />
-              </Button>
+          <div class="flex w-full relative h-14 overflow-hidden">
+            <div class="flex w-full absolute top-0 left-0 opacity-100">
+              <div class="flex">
+                <Button
+                  outlined
+                  class="mx-3 h-8 my-3 text-error"
+                  onClick={() => props.onRemove(item, i())}
+                >
+                  <Fa icon={faX} />
+                </Button>
+              </div>
+              <Input
+                type={props.type}
+                name={item.name(i())}
+                label={item.label?.(i())}
+                fullWidth={props.fullWidth}
+              />
             </div>
-            <Input
-              type={props.type}
-              name={item.name(i())}
-              label={item.label?.(i())}
-            />
-          </span>
+          </div>
         )}
       </For>
     </div>

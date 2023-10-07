@@ -126,6 +126,7 @@ export const GrpcRequest: Component<{ message: ProtoMessage }> = (props) => {
                                     type={inputType!}
                                     items={items()}
                                     label={labelField.value}
+                                    fullWidth
                                     onAdd={() =>
                                       setItems((i) => [
                                         ...i,
@@ -152,11 +153,15 @@ export const GrpcRequest: Component<{ message: ProtoMessage }> = (props) => {
                                     {...valueFieldProps}
                                     value={valueField.value}
                                     type={inputType}
+                                    fullWidth
                                   />
                                 );
                               } else {
                                 return (
-                                  <TextArea label={labelField.value ?? ""} />
+                                  <TextArea
+                                    label={labelField.value ?? ""}
+                                    fullWidth
+                                  />
                                 );
                               }
                             }}
