@@ -60,7 +60,7 @@ const InputListItem: Component<InputListItemProps> = (props) => {
   onMount(() => {
     setTimeout(() => {
       setShow(true);
-    }, 15);
+    }, 0);
   });
 
   return (
