@@ -15,6 +15,7 @@ import { Tooltip } from "./Tooltip";
 
 export interface ComponentListProps<T> {
   items: T[];
+  title?: string;
   children: (item: T, index: Accessor<number>) => JSXElement;
   onAdd: () => void;
   onRemoveAll: () => void;
@@ -48,7 +49,7 @@ export function ComponentList<T extends any>(
   return (
     <div class="flex flex-col transition-all">
       <div class="flex my-1 w-full items-center justify-between">
-        <div class="flex">Test5</div>
+        <div class="flex">{props.title}</div>
         <div class="flex">
           <Tooltip text="Add Item" delay="long">
             <Button
@@ -165,7 +166,7 @@ function ComponentListItem<T>(props: ComponentListItemProps<T>): JSXElement {
           show() && !props.removed ? "visible" : "invisible"
         )}
       >
-        <div class="pl-1 pr-3 py-3">
+        <div class="p-3">
           <Tooltip text="Remove Item" delay="long">
             <Button outlined class="h-8 text-error" onClick={handleRemove}>
               <Fa icon={faX} />

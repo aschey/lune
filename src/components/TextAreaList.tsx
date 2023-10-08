@@ -8,7 +8,7 @@ export interface TextAreaListItem {
 
 export interface TextAreaListProps {
   items: TextAreaListItem[];
-  label: string;
+  title?: string;
   fullWidth?: boolean;
   onAdd: () => void;
   onRemoveAll: () => void;
@@ -17,6 +17,7 @@ export interface TextAreaListProps {
 
 export const TextAreaList: Component<TextAreaListProps> = (props) => (
   <ComponentList
+    title={props.title}
     items={props.items}
     onAdd={props.onAdd}
     onRemoveAll={props.onRemoveAll}

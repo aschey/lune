@@ -127,7 +127,7 @@ export const GrpcRequest: Component<{ message: ProtoMessage }> = (props) => {
                                     <InputList
                                       type={inputType!}
                                       items={items()}
-                                      label={labelField.value}
+                                      title={labelField.value}
                                       fullWidth
                                       onAdd={() =>
                                         setItems((i) => [
@@ -157,7 +157,7 @@ export const GrpcRequest: Component<{ message: ProtoMessage }> = (props) => {
                                   return (
                                     <TextAreaList
                                       items={items()}
-                                      label={labelField.value ?? ""}
+                                      title={labelField.value ?? ""}
                                       fullWidth
                                       onAdd={() =>
                                         setItems((i) => [

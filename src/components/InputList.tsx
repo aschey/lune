@@ -10,7 +10,7 @@ export interface InputListItem {
 export interface InputListProps {
   items: InputListItem[];
   type: "number" | "text" | "checkbox";
-  label?: string;
+  title?: string;
   fullWidth?: boolean;
   onAdd: () => void;
   onRemoveAll: () => void;
@@ -19,6 +19,7 @@ export interface InputListProps {
 
 export const InputList: Component<InputListProps> = (props) => (
   <ComponentList
+    title={props.title}
     items={props.items}
     onAdd={props.onAdd}
     onRemoveAll={props.onRemoveAll}
