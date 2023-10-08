@@ -4,6 +4,7 @@ import Fa from "solid-fa";
 import { faPlus, faX } from "@fortawesome/free-solid-svg-icons";
 import { Button } from "./Button";
 import { twMerge } from "tailwind-merge";
+import { Tooltip } from "./Tooltip";
 
 export interface InputListItem {
   name: (index: number) => string;
@@ -25,9 +26,15 @@ export const InputList: Component<InputListProps> = (props) => {
       <div class="flex m-3 w-full items-center justify-between">
         <div class="flex">Test5</div>
         <div class="flex mr-1">
-          <Button outlined class="mx-3 h-8 text-success" onClick={props.onAdd}>
-            <Fa icon={faPlus} />
-          </Button>
+          <Tooltip text="Add Item" delay="long">
+            <Button
+              outlined
+              class="mx-3 h-8 text-success"
+              onClick={props.onAdd}
+            >
+              <Fa icon={faPlus} />
+            </Button>
+          </Tooltip>
         </div>
       </div>
 
@@ -64,31 +71,28 @@ const InputListItem: Component<InputListItemProps> = (props) => {
   });
 
   return (
-    <div
-      class={twMerge(
-        "flex w-full relative  overflow-hidden transition-all",
-        show() ? "h-14" : "h-0"
-      )}
-    >
+    <div class={twMerge("flex w-full transition-all", show() ? "h-14" : "h-0")}>
       <div
         class={twMerge(
-          "flex w-full absolute top-0 left-0 transition-all",
+          "flex w-full transition-all",
           show() ? "opacity-100" : "opacity-0"
         )}
       >
-        <div class="flex">
-          <Button
-            outlined
-            class="mx-3 h-8 my-3 text-error"
-            onClick={() => {
-              setShow(false);
-              setTimeout(() => {
-                props.onRemove(props.item, props.index);
-              }, 150);
-            }}
-          >
-            <Fa icon={faX} />
-          </Button>
+        <div class="mx-3 my-3">
+          <Tooltip text="Remove Item" delay="long">
+            <Button
+              outlined
+              class="h-8 text-error"
+              onClick={() => {
+                setShow(false);
+                setTimeout(() => {
+                  props.onRemove(props.item, props.index);
+                }, 150);
+              }}
+            >
+              <Fa icon={faX} />
+            </Button>
+          </Tooltip>
         </div>
         <Input
           type={props.type}

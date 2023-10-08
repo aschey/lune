@@ -19,4 +19,9 @@
   ::-webkit-resizer {
     @apply border-8 border-solid border-r-base-content border-b-base-content border-t-transparent border-l-transparent border-opacity-20;
   }
+
+  .tooltip-neutral-focus {
+    --tooltip-color: hsl(var(--nf));
+    --tooltip-text-color: hsl(var(--nc));
+  }
 }
