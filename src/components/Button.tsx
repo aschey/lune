@@ -5,17 +5,24 @@ export interface ButtonProps {
   children: JSXElement;
   class?: string;
   outlined?: boolean;
+  disabled?: boolean;
   onClick?: JSX.EventHandlerUnion<HTMLButtonElement, MouseEvent>;
 }
 
 export const Button: Component<ButtonProps> = (props) => (
   <button
     onClick={props.onClick}
+    disabled={props.disabled}
     class={twMerge(
-      "link link-hover px-2 py-1 rounded transition-transform active:scale-90",
+      "link link-hover px-2 py-1 rounded transition-transform",
+      !props.disabled && "active:scale-90",
+      props.disabled && "opacity-50 cursor-not-allowed",
       !props.outlined && "hover:bg-opacity-80",
       props.outlined &&
-        "border-2 border-solid border-current bg-[color-mix(in_srgb,currentColor_15%,transparent)] hover:bg-[color-mix(in_srgb,currentColor_30%,transparent)]",
+        "border-2 border-solid border-current bg-[color-mix(in_srgb,currentColor_15%,transparent)]",
+      props.outlined &&
+        !props.disabled &&
+        "hover:bg-[color-mix(in_srgb,currentColor_30%,transparent)]",
       props.class
     )}
   >

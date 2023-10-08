@@ -43,6 +43,8 @@ export function ComponentList<T extends any>(
     }
   };
 
+  const removeAllDisabled = () => props.items.length === 0;
+
   return (
     <div class="flex flex-col transition-all">
       <div class="flex m-3 w-full items-center justify-between">
@@ -60,9 +62,13 @@ export function ComponentList<T extends any>(
               <Fa icon={faPlus} />
             </Button>
           </Tooltip>
-          <Tooltip text="Remove All" delay="long">
+          <Tooltip
+            text={removeAllDisabled() ? "No items to remove" : "Remove all"}
+            delay={removeAllDisabled() ? "short" : "long"}
+          >
             <Button
               outlined
+              disabled={removeAllDisabled()}
               class="mr-3 h-8 text-error"
               onClick={() => {
                 setRemoved(true);
