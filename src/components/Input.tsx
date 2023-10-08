@@ -74,8 +74,8 @@ export const Input: Component<InputProps> = (props) => {
       return <CheckboxInput name={props.name} label={props.label} />;
     default:
       return (
-        <div class={twMerge("py-1 flex", props.fullWidth ? "w-full" : "")}>
-          <span class={twMerge("relative", props.fullWidth ? "w-full" : "")}>
+        <div class={twMerge("py-1 flex", props.fullWidth && "w-full")}>
+          <span class={twMerge("relative", props.fullWidth && "w-full")}>
             {input}
           </span>
         </div>
@@ -130,8 +130,8 @@ const NumberInput: Component<{
   };
 
   return (
-    <div class={twMerge("py-1 flex", props.fullWidth ? "w-full" : "")}>
-      <span class={twMerge("relative", props.fullWidth ? "w-full" : "")}>
+    <div class={twMerge("py-1 flex", props.fullWidth && "w-full")}>
+      <span class={twMerge("relative", props.fullWidth && "w-full")}>
         {props.input}
         <span class="hidden absolute right-2 top-[0.6rem] hover:block peer-focus:block">
           <div class="flex flex-col">

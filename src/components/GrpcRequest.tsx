@@ -4,6 +4,7 @@ import { FieldElementProps, createForm, insert } from "@modular-forms/solid";
 import { Input } from "./Input";
 import { TextArea } from "./TextArea";
 import { InputList, InputListItem } from "./InputList";
+import { TextAreaList, TextAreaListItem } from "./TextAreaList";
 
 export enum Label {
   Optional = 1,
@@ -118,36 +119,66 @@ export const GrpcRequest: Component<{ message: ProtoMessage }> = (props) => {
                           <Field name={`fields.${index()}.value`}>
                             {(valueField, valueFieldProps) => {
                               if (protoMessage.label === Label.Repeated) {
-                                const [items, setItems] = createSignal<
-                                  InputListItem[]
-                                >([]);
-                                return (
-                                  <InputList
-                                    type={inputType!}
-                                    items={items()}
-                                    label={labelField.value}
-                                    fullWidth
-                                    onAdd={() =>
-                                      setItems((i) => [
-                                        ...i,
-                                        {
-                                          name: (i) =>
-                                            `${labelField.value}.${i}`,
-                                          label: (i) =>
-                                            `${labelField.value}[${i}]`,
-                                        },
-                                      ])
-                                    }
-                                    onRemove={(item) => {
-                                      setItems((i) =>
-                                        i.filter((i) => i.name != item.name)
-                                      );
-                                    }}
-                                    onRemoveAll={() => {
-                                      setItems([]);
-                                    }}
-                                  />
-                                );
+                                if (inputType) {
+                                  const [items, setItems] = createSignal<
+                                    InputListItem[]
+                                  >([]);
+                                  return (
+                                    <InputList
+                                      type={inputType!}
+                                      items={items()}
+                                      label={labelField.value}
+                                      fullWidth
+                                      onAdd={() =>
+                                        setItems((i) => [
+                                          ...i,
+                                          {
+                                            name: (i) =>
+                                              `${labelField.value}.${i}`,
+                                            label: (i) =>
+                                              `${labelField.value}[${i}]`,
+                                          },
+                                        ])
+                                      }
+                                      onRemove={(item) => {
+                                        setItems((i) =>
+                                          i.filter((i) => i.name != item.name)
+                                        );
+                                      }}
+                                      onRemoveAll={() => {
+                                        setItems([]);
+                                      }}
+                                    />
+                                  );
+                                } else {
+                                  const [items, setItems] = createSignal<
+                                    TextAreaListItem[]
+                                  >([]);
+                                  return (
+                                    <TextAreaList
+                                      items={items()}
+                                      label={labelField.value ?? ""}
+                                      fullWidth
+                                      onAdd={() =>
+                                        setItems((i) => [
+                                          ...i,
+                                          {
+                                            label: (i) =>
+                                              `${labelField.value}[${i}]`,
+                                          },
+                                        ])
+                                      }
+                                      onRemove={(item) => {
+                                        setItems((i) =>
+                                          i.filter((i) => i.label != item.label)
+                                        );
+                                      }}
+                                      onRemoveAll={() => {
+                                        setItems([]);
+                                      }}
+                                    />
+                                  );
+                                }
                               }
                               if (inputType) {
                                 return (

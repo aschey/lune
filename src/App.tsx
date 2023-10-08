@@ -40,6 +40,14 @@ const App = () => {
         type: Type.Float,
         label: Label.Repeated,
       },
+      test6: {
+        type: Type.String,
+        label: Label.Repeated,
+      },
+      test7: {
+        type: Type.Bytes,
+        label: Label.Repeated,
+      },
     },
   };
 
