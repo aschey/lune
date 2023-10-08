@@ -47,9 +47,9 @@ export function ComponentList<T extends any>(
 
   return (
     <div class="flex flex-col transition-all">
-      <div class="flex m-3 w-full items-center justify-between">
+      <div class="flex my-1 w-full items-center justify-between">
         <div class="flex">Test5</div>
-        <div class="flex mr-1">
+        <div class="flex">
           <Tooltip text="Add Item" delay="long">
             <Button
               outlined
@@ -69,7 +69,7 @@ export function ComponentList<T extends any>(
             <Button
               outlined
               disabled={removeAllDisabled()}
-              class="mr-3 h-8 text-error"
+              class="h-8 text-error"
               onClick={() => {
                 setRemoved(true);
                 if (!removeAllTimeout()) {
@@ -165,7 +165,7 @@ function ComponentListItem<T>(props: ComponentListItemProps<T>): JSXElement {
           show() && !props.removed ? "visible" : "invisible"
         )}
       >
-        <div class="mx-3 my-3">
+        <div class="pl-1 pr-3 py-3">
           <Tooltip text="Remove Item" delay="long">
             <Button outlined class="h-8 text-error" onClick={handleRemove}>
               <Fa icon={faX} />
