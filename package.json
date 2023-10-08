@@ -34,7 +34,7 @@
     "@storybook/manager-api": "7.4.6",
     "@storybook/testing-library": "0.2.2",
     "@storybook/theming": "7.4.6",
-    "@tauri-apps/cli": "2.0.0-alpha.14",
+    "@tauri-apps/cli": "2.0.0-alpha.15",
     "@types/node": "20.8.2",
     "autoprefixer": "^10.4.16",
     "mirrorful": "^6.1.15",

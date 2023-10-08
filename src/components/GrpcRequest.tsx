@@ -143,6 +143,9 @@ export const GrpcRequest: Component<{ message: ProtoMessage }> = (props) => {
                                         i.filter((i) => i.name != item.name)
                                       );
                                     }}
+                                    onRemoveAll={() => {
+                                      setItems([]);
+                                    }}
                                   />
                                 );
                               }

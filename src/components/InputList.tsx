@@ -1,7 +1,7 @@
-import { Component, For, createSignal, onMount } from "solid-js";
+import { Component, For, createSignal, onCleanup, onMount } from "solid-js";
 import { Input } from "./Input";
 import Fa from "solid-fa";
-import { faPlus, faX } from "@fortawesome/free-solid-svg-icons";
+import { faPlus, faTrash, faX } from "@fortawesome/free-solid-svg-icons";
 import { Button } from "./Button";
 import { twMerge } from "tailwind-merge";
 import { Tooltip } from "./Tooltip";
@@ -17,10 +17,30 @@ export interface InputListProps {
   label?: string;
   fullWidth?: boolean;
   onAdd: () => void;
+  onRemoveAll: () => void;
   onRemove: (item: InputListItem, index: number) => void;
 }
 
 export const InputList: Component<InputListProps> = (props) => {
+  const [removed, setRemoved] = createSignal(false);
+  const [removeAllTimeout, setRemoveAllTimeout] = createSignal<
+    NodeJS.Timeout | undefined
+  >(undefined);
+
+  const removeAll = () => {
+    props.onRemoveAll();
+    setRemoved(false);
+    setRemoveAllTimeout(undefined);
+  };
+
+  const cancelRemoveAllTimeout = () => {
+    const timeout = removeAllTimeout();
+    if (timeout) {
+      removeAll();
+      clearTimeout(timeout);
+    }
+  };
+
   return (
     <div class="flex flex-col transition-all">
       <div class="flex m-3 w-full items-center justify-between">
@@ -30,9 +50,31 @@ export const InputList: Component<InputListProps> = (props) => {
             <Button
               outlined
               class="mx-3 h-8 text-success"
-              onClick={props.onAdd}
+              onClick={() => {
+                cancelRemoveAllTimeout();
+                props.onAdd();
+              }}
             >
               <Fa icon={faPlus} />
+            </Button>
+          </Tooltip>
+          <Tooltip text="Remove All" delay="long">
+            <Button
+              outlined
+              class="mr-3 h-8 text-error"
+              onClick={() => {
+                setRemoved(true);
+                if (!removeAllTimeout()) {
+                  setRemoveAllTimeout(
+                    setAnimationTimeout(() => {
+                      removeAll();
+                      setRemoveAllTimeout(undefined);
+                    })
+                  );
+                }
+              }}
+            >
+              <Fa icon={faTrash} />
             </Button>
           </Tooltip>
         </div>
@@ -42,6 +84,7 @@ export const InputList: Component<InputListProps> = (props) => {
         {(item, i) => (
           <InputListItem
             item={item}
+            removed={removed()}
             index={i()}
             type={props.type}
             fullWidth={props.fullWidth}
@@ -56,6 +99,7 @@ export const InputList: Component<InputListProps> = (props) => {
 interface InputListItemProps {
   item: InputListItem;
   index: number;
+  removed: boolean;
   type: "number" | "text" | "checkbox";
   fullWidth?: boolean;
   onRemove: (item: InputListItem, index: number) => void;
@@ -63,6 +107,9 @@ interface InputListItemProps {
 
 const InputListItem: Component<InputListItemProps> = (props) => {
   const [show, setShow] = createSignal(false);
+  const [removeTimeout, setRemoveTimeout] = createSignal<
+    NodeJS.Timeout | undefined
+  >(undefined);
 
   onMount(() => {
     setTimeout(() => {
@@ -70,12 +117,29 @@ const InputListItem: Component<InputListItemProps> = (props) => {
     }, 0);
   });
 
+  const clearRemoveTimeout = () => {
+    const timeout = removeTimeout();
+    if (timeout) {
+      clearTimeout(timeout);
+      setRemoveTimeout(undefined);
+    }
+  };
+
+  onCleanup(() => {
+    clearRemoveTimeout();
+  });
+
   return (
-    <div class={twMerge("flex w-full transition-all", show() ? "h-14" : "h-0")}>
+    <div
+      class={twMerge(
+        "flex w-full transition-all",
+        show() && !props.removed ? "h-14" : "h-0"
+      )}
+    >
       <div
         class={twMerge(
           "flex w-full transition-all",
-          show() ? "opacity-100" : "opacity-0"
+          show() && !props.removed ? "opacity-100" : "opacity-0"
         )}
       >
         <div class="mx-3 my-3">
@@ -85,9 +149,13 @@ const InputListItem: Component<InputListItemProps> = (props) => {
               class="h-8 text-error"
               onClick={() => {
                 setShow(false);
-                setTimeout(() => {
-                  props.onRemove(props.item, props.index);
-                }, 150);
+                if (!removeTimeout()) {
+                  const timeout = setAnimationTimeout(() => {
+                    props.onRemove(props.item, props.index);
+                    setRemoveTimeout(undefined);
+                  });
+                  setRemoveTimeout(timeout);
+                }
               }}
             >
               <Fa icon={faX} />
@@ -104,3 +172,5 @@ const InputListItem: Component<InputListItemProps> = (props) => {
     </div>
   );
 };
+
+const setAnimationTimeout = (f: () => void) => setTimeout(f, 150);
