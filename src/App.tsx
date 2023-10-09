@@ -2,16 +2,12 @@ import { createSignal } from "solid-js";
 import logo from "./assets/logo.svg";
 import { invoke } from "@tauri-apps/api/tauri";
 import { Tab, Tabs } from "./components/Tabs";
-// import { Service, Services } from "./components/Services";
+
 import { Card } from "./components/Card";
-import {
-  GrpcRequest,
-  Label,
-  ProtoMessage,
-  Type,
-} from "./components/GrpcRequest";
+import { GrpcRequest } from "./components/GrpcRequest";
 import { Expander, ExpanderNodeProps } from "./components/Expander";
 import { InputList, InputListItem } from "./components/InputList";
+import { MessageDescriptor } from "./bindings";
 
 const App = () => {
   const services: ExpanderNodeProps[] = [
@@ -22,33 +18,62 @@ const App = () => {
     { name: "service 2", children: [] },
     { name: "service 3", children: ["method 1"] },
   ];
-  const protoRequest: ProtoMessage = {
-    fields: {
-      test: {
-        type: Type.Float,
+  const protoRequest: MessageDescriptor = {
+    name: "test",
+    fields: [
+      {
+        name: "test1",
+        number: 1,
+        cardinality: "Optional",
+        kind: "String",
+        oneof_index: null,
       },
-      test2: {
-        type: Type.String,
+      {
+        name: "test2",
+        number: 1,
+        cardinality: "Optional",
+        kind: "Int32",
+
+        oneof_index: null,
       },
-      test3: {
-        type: Type.Bool,
+      {
+        name: "test3",
+        number: 1,
+        cardinality: "Optional",
+        kind: "Bool",
+
+        oneof_index: null,
       },
-      test4: {
-        type: Type.Bytes,
+      {
+        name: "test4",
+        number: 1,
+        cardinality: "Optional",
+        kind: "Bytes",
+        oneof_index: null,
       },
-      test5: {
-        type: Type.Float,
-        label: Label.Repeated,
+      {
+        name: "test5",
+        number: 1,
+        cardinality: "Repeated",
+        kind: "Float",
+        oneof_index: null,
       },
-      test6: {
-        type: Type.String,
-        label: Label.Repeated,
+      {
+        name: "test6",
+        number: 1,
+        cardinality: "Repeated",
+        kind: "String",
+
+        oneof_index: null,
       },
-      test7: {
-        type: Type.Bytes,
-        label: Label.Repeated,
+      {
+        name: "test7",
+        number: 1,
+        cardinality: "Repeated",
+        kind: "Bytes",
+        oneof_index: null,
       },
-    },
+    ],
   };
 
   const [items, setItems] = createSignal<InputListItem[]>([]);

@@ -22,6 +22,7 @@ use tonic_reflection::pb::{
 use crate::{
     codec::DynamicCodec,
     grpc::{MethodKind, Request, Response},
+    metadata::FileDescriptor,
 };
 #[derive(Clone, Debug)]
 pub struct Client {
@@ -74,41 +75,19 @@ impl Client {
                 if let MessageResponse::FileDescriptorResponse(descriptors) = response {
                     for descriptor in descriptors.file_descriptor_proto {
                         let decoded = FileDescriptorProto::decode(&*descriptor).unwrap();
-
                         pool.add_file_descriptor_proto(decoded.clone()).unwrap();
-
-                        println!("Name: {}", decoded.name());
-                        println!("Options: {:?}", decoded.options);
-                        println!("Package: {}", decoded.package());
-                        println!("Enum types: {:#?}", decoded.enum_type);
-
-                        println!("Message types");
-                        for message_type in decoded.message_type {
-                            println!("Message {:?}", message_type.name());
-                            for field in message_type.field {
-                                println!("{field:#?}");
-                            }
-                        }
-
-                        println!("Dependencies");
-                        for d in decoded.dependency {
-                            println!("    {d}")
-                        }
-                        println!("Services");
-
-                        for service in decoded.service {
-                            for method in service.method {
-                                println!("    {method:#?}");
-                            }
-                        }
                     }
                 }
-
-                for service in pool.services() {
-                    for method in service.methods() {
-                        make_template_message(method.input());
-                    }
+                for file in pool.files() {
+                    let fd = FileDescriptor::from(file);
+                    println!("{fd:#?}")
                 }
+
+                // for service in pool.services() {
+                //     for method in service.methods() {
+                //         make_template_message(method.input());
+                //     }
+                // }
             }
         }
     }
