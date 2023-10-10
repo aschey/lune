@@ -78,7 +78,7 @@ impl Client {
                         pool.add_file_descriptor_proto(decoded.clone()).unwrap();
                     }
                 }
-                for file in pool.files() {
+                for file in pool.files().find(|f| f.name().contains("foobar")) {
                     let fd = FileDescriptor::from(file);
                     println!("{fd:#?}")
                 }

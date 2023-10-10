@@ -72,10 +72,11 @@ message BarRequest {
 message BarResponse {}
 
 message BazRequest {
+  repeated string type_repeated_string = 1;
   oneof request {
-    FooRequest foo = 1;
-    BarRequest bar = 2;
-    string baz = 3;
+    FooRequest foo = 2;
+    BarRequest bar = 3;
+    string baz = 4;
   }
 }
 

@@ -15,23 +15,23 @@ const toInputType = (
   type: Kind
 ): "number" | "text" | "checkbox" | undefined => {
   switch (type) {
-    case "Double":
-    case "Float":
-    case "Int64":
-    case "Uint64":
-    case "Int32":
-    case "Fixed64":
-    case "Fixed64":
-    case "Sfixed64":
-    case "Sfixed32":
-    case "Sint64":
-    case "Sint32":
+    case "double":
+    case "float":
+    case "int64":
+    case "uint64":
+    case "int32":
+    case "fixed64":
+    case "fixed32":
+    case "sfixed64":
+    case "sfixed32":
+    case "sint64":
+    case "sint32":
       return "number";
-    case "Bool":
+    case "bool":
       return "checkbox";
-    case "String":
+    case "string":
       return "text";
-    case "Bytes":
+    case "bytes":
       return undefined;
     default:
       return "text";
@@ -66,7 +66,7 @@ export const GrpcRequest: Component<{ message: MessageDescriptor }> = (
                         return (
                           <Field name={`fields.${index()}.value`}>
                             {(valueField, valueFieldProps) => {
-                              if (protoMessage.cardinality === "Repeated") {
+                              if (protoMessage.cardinality === "repeated") {
                                 if (inputType) {
                                   const [items, setItems] = createSignal<
                                     InputListItem[]

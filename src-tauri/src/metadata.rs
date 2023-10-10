@@ -1,6 +1,7 @@
 use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize, specta::Type, Debug)]
+#[serde(rename_all = "camelCase")]
 pub struct FileDescriptor {
     pub name: String,
     pub enum_types: Vec<EnumDescriptor>,
@@ -20,6 +21,7 @@ impl From<prost_reflect::FileDescriptor> for FileDescriptor {
 }
 
 #[derive(Serialize, Deserialize, specta::Type, Debug)]
+#[serde(rename_all = "camelCase")]
 pub struct EnumDescriptor {
     pub name: String,
     pub values: Vec<EnumValueDescriptor>,
@@ -35,6 +37,7 @@ impl From<prost_reflect::EnumDescriptor> for EnumDescriptor {
 }
 
 #[derive(Serialize, Deserialize, specta::Type, Debug)]
+#[serde(rename_all = "camelCase")]
 pub struct EnumValueDescriptor {
     pub name: String,
     pub number: i32,
@@ -50,6 +53,7 @@ impl From<prost_reflect::EnumValueDescriptor> for EnumValueDescriptor {
 }
 
 #[derive(Serialize, Deserialize, specta::Type, Debug)]
+#[serde(rename_all = "camelCase")]
 pub struct ServiceDescriptor {
     pub name: String,
     pub methods: Vec<MethodDescriptor>,
@@ -65,6 +69,7 @@ impl From<prost_reflect::ServiceDescriptor> for ServiceDescriptor {
 }
 
 #[derive(Serialize, Deserialize, specta::Type, Debug)]
+#[serde(rename_all = "camelCase")]
 pub struct MethodDescriptor {
     pub name: String,
     pub input: MessageDescriptor,
@@ -86,9 +91,11 @@ impl From<prost_reflect::MethodDescriptor> for MethodDescriptor {
 }
 
 #[derive(Serialize, Deserialize, specta::Type, Debug)]
+#[serde(rename_all = "camelCase")]
 pub struct MessageDescriptor {
     pub name: String,
     pub fields: Vec<FieldDescriptor>,
+    pub oneofs: Vec<OneofDescriptor>,
 }
 
 impl From<prost_reflect::MessageDescriptor> for MessageDescriptor {
@@ -96,17 +103,18 @@ impl From<prost_reflect::MessageDescriptor> for MessageDescriptor {
         Self {
             name: value.name().to_string(),
             fields: value.fields().map(|f| f.into()).collect(),
+            oneofs: value.oneofs().map(|o| o.into()).collect(),
         }
     }
 }
 
 #[derive(Serialize, Deserialize, specta::Type, Debug)]
+#[serde(rename_all = "camelCase")]
 pub struct FieldDescriptor {
     pub name: String,
     pub number: u32,
     pub cardinality: Cardinality,
     pub kind: Kind,
-    pub oneof_index: Option<u32>,
 }
 
 impl From<prost_reflect::FieldDescriptor> for FieldDescriptor {
@@ -116,12 +124,12 @@ impl From<prost_reflect::FieldDescriptor> for FieldDescriptor {
             number: value.number(),
             cardinality: value.cardinality().into(),
             kind: value.kind().into(),
-            oneof_index: value.field_descriptor_proto().oneof_index.map(|i| i as u32),
         }
     }
 }
 
 #[derive(Serialize, Deserialize, specta::Type, Debug)]
+#[serde(rename_all = "camelCase")]
 pub struct OneofDescriptor {
     name: String,
     fields: Vec<FieldDescriptor>,
@@ -137,6 +145,7 @@ impl From<prost_reflect::OneofDescriptor> for OneofDescriptor {
 }
 
 #[derive(Serialize, Deserialize, specta::Type, Debug)]
+#[serde(rename_all = "camelCase")]
 pub enum Cardinality {
     Optional,
     Required,
@@ -154,12 +163,14 @@ impl From<prost_reflect::Cardinality> for Cardinality {
 }
 
 #[derive(Serialize, Deserialize, specta::Type, Debug)]
+#[serde(rename_all = "camelCase")]
 pub enum MessageKind {
     Normal(String),
     Map { key: String, value: String },
 }
 
 #[derive(Serialize, Deserialize, specta::Type, Debug)]
+#[serde(rename_all = "camelCase")]
 pub enum Kind {
     Double,
     Float,
