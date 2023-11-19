@@ -23,23 +23,80 @@ const App = () => {
   const fileDescriptor: FileDescriptor = {
     name: "testFd",
     enumTypes: [],
-    messageTypes: [],
+    messageTypes: [
+      {
+        name: "input1",
+        fields: [
+          {
+            name: "test1",
+            number: 1,
+            cardinality: "optional",
+            kind: "string",
+          },
+          {
+            name: "test2",
+            number: 2,
+            cardinality: "optional",
+            kind: "int32",
+          },
+          {
+            name: "test3",
+            number: 3,
+            cardinality: "optional",
+            kind: "bool",
+          },
+          {
+            name: "test4",
+            number: 4,
+            cardinality: "optional",
+            kind: "bytes",
+          },
+          {
+            name: "test5",
+            number: 5,
+            cardinality: "repeated",
+            kind: "float",
+          },
+          {
+            name: "test6",
+            number: 6,
+            cardinality: "repeated",
+            kind: "string",
+          },
+          {
+            name: "test7",
+            number: 7,
+            cardinality: "repeated",
+            kind: "bytes",
+          },
+          {
+            name: "test8",
+            number: 8,
+            cardinality: "optional",
+            kind: { message: { normal: "test" } },
+          },
+        ],
+        oneofs: [],
+      },
+      {
+        name: "output1",
+        fields: [],
+        oneofs: [],
+      },
+      {
+        name: "test",
+        fields: [],
+        oneofs: [],
+      },
+    ],
     services: [
       {
         name: "service1",
         methods: [
           {
             name: "foo",
-            input: {
-              name: "input1",
-              fields: [],
-              oneofs: [],
-            },
-            output: {
-              name: "output1",
-              fields: [],
-              oneofs: [],
-            },
+            input: "input1",
+            output: "output1",
             isClientStreaming: false,
             isServerStreaming: false,
           },
@@ -48,76 +105,17 @@ const App = () => {
     ],
   };
 
-  const protoRequest: MessageDescriptor = {
-    name: "test",
-    fields: [
-      {
-        name: "test1",
-        number: 1,
-        cardinality: "optional",
-        kind: "string",
-      },
-      {
-        name: "test2",
-        number: 1,
-        cardinality: "optional",
-        kind: "int32",
-      },
-      {
-        name: "test3",
-        number: 1,
-        cardinality: "optional",
-        kind: "bool",
-      },
-      {
-        name: "test4",
-        number: 1,
-        cardinality: "optional",
-        kind: "bytes",
-      },
-      {
-        name: "test5",
-        number: 1,
-        cardinality: "repeated",
-        kind: "float",
-      },
-      {
-        name: "test6",
-        number: 1,
-        cardinality: "repeated",
-        kind: "string",
-      },
-      {
-        name: "test7",
-        number: 1,
-        cardinality: "repeated",
-        kind: "bytes",
-      },
-    ],
-    oneofs: [],
-  };
-
-  const [items, setItems] = createSignal<InputListItem[]>([]);
-  const [selected, setSelected] = createSignal(undefined);
   return (
     <div class="flex flex-col container pt-1 pl-1">
-      <div class="flex">
-        <Select
-          placeholder="choose a thing"
-          selectedOption={selected()}
-          onChange={setSelected}
-          options={["thing 1", "thing 2", "thing 3"]}
-        />
-      </div>
-      <div class="flex flex-row">
+      <div class="flex flex-row p-2">
         <div class="w-60 text-center">
           <Card>
             <Expander nodes={services} />
           </Card>
         </div>
-        <div class="flex w-full pt-1 pl-10">
+        <div class="flex w-full px-10">
           <div class="w-1/2">
-            <GrpcRequest message={protoRequest} />
+            <GrpcRequest message={fileDescriptor.messageTypes[0]} />
           </div>
           <div class="divider divider-horizontal before:bg-neutral after:bg-neutral" />
           <div class="w-1/2">

@@ -32,8 +32,8 @@ export type EnumValueDescriptor = { name: string; number: number };
 
 export type MethodDescriptor = {
   name: string;
-  input: MessageDescriptor;
-  output: MessageDescriptor;
+  input: string;
+  output: string;
   isClientStreaming: boolean;
   isServerStreaming: boolean;
 };

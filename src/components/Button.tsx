@@ -6,6 +6,7 @@ export interface ButtonProps {
   class?: string;
   outlined?: boolean;
   disabled?: boolean;
+  type?: "submit" | "reset" | "button";
   onClick?: JSX.EventHandlerUnion<HTMLButtonElement, MouseEvent>;
 }
 
@@ -13,6 +14,7 @@ export const Button: Component<ButtonProps> = (props) => (
   <button
     onClick={props.onClick}
     disabled={props.disabled}
+    type={props.type}
     class={twMerge(
       "link link-hover px-2 py-1 rounded transition-transform",
       !props.disabled && "active:scale-90",

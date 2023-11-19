@@ -72,8 +72,8 @@ impl From<prost_reflect::ServiceDescriptor> for ServiceDescriptor {
 #[serde(rename_all = "camelCase")]
 pub struct MethodDescriptor {
     pub name: String,
-    pub input: MessageDescriptor,
-    pub output: MessageDescriptor,
+    pub input: String,
+    pub output: String,
     pub is_client_streaming: bool,
     pub is_server_streaming: bool,
 }
@@ -82,8 +82,8 @@ impl From<prost_reflect::MethodDescriptor> for MethodDescriptor {
     fn from(value: prost_reflect::MethodDescriptor) -> Self {
         Self {
             name: value.name().to_string(),
-            input: value.input().into(),
-            output: value.output().into(),
+            input: value.input().name().to_string(),
+            output: value.output().name().to_string(),
             is_client_streaming: value.is_client_streaming(),
             is_server_streaming: value.is_server_streaming(),
         }

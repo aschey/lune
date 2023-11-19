@@ -39,14 +39,14 @@ export const Input: Component<InputProps> = (props) => {
         onChange={props.onChange}
         onBlur={props.onBlur}
         class={twMerge(
-          "peer input-bordered input-md border border-base-content border-opacity-40 bg-base-100 rounded-btn text-base focus-visible:ring-1 ring-secondary focus:outline-none z-1",
-          !!props.label ? "pt-4" : "",
-          props.fullWidth ? "w-full" : ""
+          "peer input-bordered pl-4 border border-base-content border-opacity-40 bg-base-100 rounded-btn text-base focus-visible:ring-1 ring-secondary focus:outline-none z-1",
+          !!props.label ? "pt-4 pb-2" : "py-2",
+          props.fullWidth && "w-full"
         )}
       />
       {props.label && (
         <label
-          class={`absolute top-3 left-0 pl-4 text-base-content scale-90 -translate-y-3 transition-transform ${
+          class={`absolute top-3 left-0 pl-[0.9rem] text-base-content scale-90 -translate-y-3 transition-transform ${
             !btnMouseDown() &&
             "peer-focus:scale-90 peer-focus:-translate-y-3 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0"
           }`}
