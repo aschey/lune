@@ -3,3 +3,4 @@ yarn-error.log
 target
 dist
 .yarn
+src-tauri/gen

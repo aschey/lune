@@ -10,12 +10,12 @@ mod metadata;
 
 #[tokio::main]
 async fn main() {
-    specta::export::ts("../src/bindings.ts").unwrap();
-    let client = Client::new("http://localhost:5051".parse().unwrap(), false).await;
-    client.reflect().await;
+    // specta::export::ts("../src/bindings.ts").unwrap();
+    // let client = Client::new("http://localhost:5051".parse().unwrap(), false).await;
+    // client.reflect().await;
 
-    // tauri::Builder::default()
-    //     //.invoke_handler(tauri::generate_handler![greet])
-    //     .run(tauri::generate_context!())
-    //     .expect("error while running tauri application");
+    tauri::Builder::default()
+        //.invoke_handler(tauri::generate_handler![greet])
+        .run(tauri::generate_context!())
+        .expect("error while running tauri application");
 }
